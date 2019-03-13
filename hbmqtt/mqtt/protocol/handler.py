@@ -442,6 +442,8 @@ class ProtocolHandler:
     @asyncio.coroutine
     def _send_packet(self, packet):
         try:
+            if self.writer is None:
+                raise ConnectionResetError()
             with (yield from self._write_lock):
                 yield from packet.to_stream(self.writer)
             if self._keepalive_task:
