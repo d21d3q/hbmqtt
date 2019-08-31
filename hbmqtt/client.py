@@ -424,6 +424,7 @@ class MQTTClient:
             if return_code is not CONNECTION_ACCEPTED:
                 self.session.transitions.disconnect()
                 self.logger.warning("Connection rejected with code '%s'" % return_code)
+                yield from writer.close()
                 exc = ConnectException("Connection rejected by broker")
                 exc.return_code = return_code
                 raise exc
